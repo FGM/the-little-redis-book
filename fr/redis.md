@@ -1,30 +1,55 @@
-# About This Book
+# A propos de ce livre
 
-## License
+## Licence
 
-The Little Redis Book is licensed under the Attribution-NonCommercial 3.0 Unported license. You should not have paid for this book.
+Le Petit Livre de Redis est distribué sous la licence Attribution-NonCommercial 
+3.0 Unported. Vous ne devriez pas avoir eu à payer pour ce livre.
 
-You are free to copy, distribute, modify or display the book. However, I ask that you always attribute the book to me, Karl Seguin, and do not use it for commercial purposes.
+Vous êtes libre de copier, distribuer, modifier et afficher ce livre. Néanmoins, 
+nous vous demandons de toujours attribuer ce livre en tant à Karl Seguin en tant 
+qu'auteur et Frédéric G. Marand en qualité de traducteur et de ne pas l'utiliser 
+à des fins commerciales. 
 
-You can see the *full text* of **the license at**:
+Le *texte intégral* de **la licence** est disponible sur:
 
 <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
-## About The Author
+## A propos de l'auteur
 
-Karl Seguin is a developer with experience across various fields and technologies. He's an active contributor to Open-Source Software projects, a technical writer and an occasional speaker. He's written various articles, as well as a few tools, about Redis. Redis powers the ranking and statistics of his free service for casual game developers: [mogade.com](http://mogade.com/).
+Karl Seguin est un développeur dont le champ d'expérience couvre de multiples
+champs et technologies. C'est un contributeur de multiples project Open Source,
+un rédateur technique et à l'occasion un conférencier. Il est l'auteur de 
+multiples articles, ainsi que de quelques outils autour de Redis. Redis est le
+moteur de classement et statistiques de son service gratuit pour les développeurs
+de jeux amateurs: [mogade.com](http://mogade.com/).
 
-Karl wrote [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/), the free and popular book about MongoDB.
+Karl a aussi écrit [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/), 
+son populaire ouvrage gratuit à propos de MongoDB.
 
-His blog can be found at <http://openmymind.net> and he tweets via [@karlseguin](http://twitter.com/karlseguin)
+Son blog se trouve sur <http://openmymind.net> et il tweete en tant que
+[@karlseguin](http://twitter.com/karlseguin)
 
-## With Thanks To
+## A propos du traducteur
 
-A special thanks to [Perry Neal](https://twitter.com/perryneal) for lending me his eyes, mind and passion. You provided me with invaluable help. Thank you.
+Frédéric G. Marand est un développeur qui passe l'essentiel de son temps à la
+maintenance du CMS Drupal et au conseil en performance et sécurité autour de cet
+outil, dont il est un contributeur core depuis 2005. Dans une vie antérieure, sa 
+spécialité était le protocole NFS, dont il a gardé une affinité particulière 
+pour les mécanismes de RPC, comme XML-RPC.
 
-## Latest Version
+Le monde Drupal le connaît comme `fgm`, son blog se trouve sur 
+<http://blog.riff.org>, et il tweete en tant que 
+[@osinet](http://titter.com/osinet)
 
-The latest source of this book is available at:
+## Remerciements de l'auteur
+
+Merci tout particulièrement à [Perry Neal](https://twitter.com/perryneal) pour
+m'avoir prêté son regard, sa réflexion, et sa passion. Tu m'as fourni une aide
+inappréciable. Merci.
+
+## Version courante
+
+La version la plus récente de ce livre est disponible sur:
 <http://github.com/karlseguin/the-little-redis-book>
 
 # Introduction

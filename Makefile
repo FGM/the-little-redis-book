@@ -26,7 +26,7 @@ en/redis.mobi: en/redis.epub
 fr/redis.pdf:
 	cd fr && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME) -o $(BOOK_FILE_NAME).pdf
 
-fr/redis.epub: en/title.png en/title.txt en/redis.md
+fr/redis.epub: fr/title.png fr/title.txt fr/redis.md
 	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o $@
 
 fr/redis.mobi: fr/redis.epub
