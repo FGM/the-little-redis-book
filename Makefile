@@ -23,6 +23,15 @@ en/redis.epub: en/title.png en/title.txt en/redis.md
 en/redis.mobi: en/redis.epub
 	$(MOBI_BUILDER) $^
 
+fr/redis.pdf:
+	cd fr && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME) -o $(BOOK_FILE_NAME).pdf
+
+fr/redis.epub: en/title.png en/title.txt en/redis.md
+	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o $@
+
+fr/redis.mobi: fr/redis.epub
+	$(MOBI_BUILDER) $^
+
 clean:
 	rm -f */$(BOOK_FILE_NAME).pdf
 	rm -f */$(BOOK_FILE_NAME).epub
