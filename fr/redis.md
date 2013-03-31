@@ -54,13 +54,40 @@ La version la plus récente de ce livre est disponible sur:
 
 # Introduction
 
-Over the last couple years, the techniques and tools used for persisting and querying data have grown at an incredible pace. While it's safe to say that relational databases aren't going anywhere, we can also say that the ecosystem around data is never going to be the same.
+Ces dernières années, les techniques et outils utilisés pour le stockage et 
+l'accès aux données ont évolué à une cadence incroyable. Même s'il est 
+raisonnable d'affirmer que les bases de données relationnelles ne sont pas près 
+de disparaître, il est tout aussi certain que l'écosystème entourant les données
+ne restera pas figé.
 
-Of all the new tools and solutions, for me, Redis has been the most exciting. Why? First because it's unbelievably easy to learn. Hours is the right unit to use when talking about length of time it takes to get comfortable with Redis. Secondly, it solves a specific set of problems while at the same time being quite generic. What exactly does that mean? Redis doesn't try to be all things to all data. As you get to know Redis, it'll become increasingly evident what does and what does not belong in it. And when it does, as a developer, it's a great experience.
+Parmi tous les nouveaux outils et les nouvelles solutions, de mon point de vue,
+Redis a été le plus excitant. Pourquoi ? En premier lieu parce qu'il est
+incroyablement simple à apprendre. C'est en heures qu'il faut compter pour 
+évaluer le temps nécessaire à se sentir à l'aise avec Redis. En second lieu, il
+traite un ensemble de problèmes bien spécifique tout en demeurant dans le même
+temps assez général. Qu'est-ce à dire ? Simplement que Redis n'essaie pas d'être
+le solution à tous les problèmes liés à tous les types de données. Mieux vous
+connaissez Redis, plus le choix de ce qu'il est approprié d'y trouver - ou pas -
+devient évident. Et pour un développeur, un tel degré d'évidence est une 
+expérience gratifiante. 
 
-While you can build a complete system using Redis only, I think most people will find that it supplements their more generic data solution - whether that be a traditional relational database, a document-oriented system, or something else. It's the kind of solution you use to implement specific features. In that way, it's similar to an indexing engine. You wouldn't build your entire application on Lucene. But when you need good search, it's a much better experience - for both you and your users. Of course, the similarities between Redis and indexing engines end there.
+Bien qu'il soit possible de construire un système complet uniquement avec Redis,
+je pense que la plupart des gens découvriront qu'il vient en complément de leur
+solution de données plus générale - que ce soit une base de données relationnelle
+traditionnelle, une base de données orientée document, ou autre chose encore. 
+Redis est le type de solution que l'on utilise pour implémenter une 
+fonction spécifique. En ce sens, il est similaire à un moteur d'indexation. 
+Personne n'envisagerait de construire une application entière sur Lucene; mais
+lorsqu'un bon moteur de recherche est nécesaire, utiliser Lucene est bien plus
+approprié qu'un système d'accès aux données générique - tant pour le développeur
+que pour les utilisateurs. Bien entendu, là s'arrêtent les similarités entre
+Redis et les moteurs d'indexation. 
 
-The goal of this book is to build the foundation you'll need to master Redis. We'll focus on learning Redis' five data structures and look at various data modeling approaches. We'll also touch on some key administrative details and debugging techniques.
+Le but de ce livre est d'établir les fondations dont vous aurez besoin pour
+maîtriser Redis. Nous nous focaliserons sur l'apprentissage des cinq structures
+de données de Redis et examinerons diverses approches de modélisation des 
+données. Enfin, nous aborderons quelques détails d'administration système et
+techniques de déboguage.
 
 # Getting Started
 
