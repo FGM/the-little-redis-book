@@ -89,46 +89,87 @@ de données de Redis et examinerons diverses approches de modélisation des
 données. Enfin, nous aborderons quelques détails d'administration système et
 techniques de déboguage.
 
-# Getting Started
+# Démarrer avec Redis
 
-We all learn differently: some like to get their hands dirty, some like to watch videos, and some like to read. Nothing will help you understand Redis more than actually experiencing it. Redis is easy to install and comes with a simple shell that'll give us everything we need. Let's take a couple minutes and get it up and running on our machine.
+Chacun a sa façon d'apprendre: certains préfèrent mettre les mains dans le 
+cambouis, d'autres préfèrent regarder des vidéos, d'autres encore préfèrent 
+lire. Rien ne vous aidera à comprendre Redis autant que de réellement 
+l'utiliser. Redis est facile à installer et comporte un shell simple fournissant
+tout ce le nécessaire. Prenons quelques minutes pour le mettre en service sur
+notre machine. 
 
-## On Windows
+## Sur Windows
 
-Redis itself doesn't officially support Windows, but there are options available. You wouldn't run these in production, but I've never experienced any limitations while doing development.
+Redis lui-même n'est pas officiellement soutenu sur Windows, mais certaines
+options sont disponibles. Il n'est pas question de les utiliser en production,
+mais je n'ai personnellement jamais rencontré de limites en développement.
 
-A port by Microsoft Open Technologies, Inc. can be found at <https://github.com/MSOpenTech/redis>. As of this writing the solution is not ready for use in production systems.
+Un portage réalisé par Microsoft Open Technologies, Inc. est disponible sur
+<https://github.com/MSOpenTech/redishttps://github.com/MSOpenTech/redis>. A la 
+date d'écriture de ce livre, cette solution n'est pas prête à être déployée en 
+production.
 
-Another solution, which has been available for some time, can be found at <https://github.com/dmajkic/redis/downloads>. You can download the most up to date version (which should be at the top of the list). Extract the zip file and, based on your architecture, open either the `64bit` or `32bit` folder.
+Une autre solution, déjà disponible depuis quelques années, est disponible sur
+<https://github.com/dmajkic/redis/downloads>. Vous pouvez télécharger la version
+la plus récente (en haut de la liste). Décompressez le fichier zip et, selon
+l'architecture de votre machine, ouvrez le répertoire `64bit` ou `32bit`.
 
-## On *nix and MacOSX
+## Sur *nix et MacOSX
 
-For *nix and and Mac users, building it from source is your best option. The instructions, along with the latest version number, are available at <http://redis.io/download>. At the time of this writing the latest version is 2.6.2; to install this version we would execute:
+Pour les utilisateurs de systèmes \*nix et Mac, installer à partir des sources
+et la meilleure option. Les instructions, ainsi que le numéro de la version la
+plus récente, sont disponibles sur <http://redis.io/download>. A la date de
+rédaction de ce livre, la version la plus récente est la 2.6.2; pour l'installer,
+nous exécuterions donc:
 
 	wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
 	tar xzf redis-2.6.2.tar.gz
 	cd redis-2.6.2
 	make
 
-(Alternatively, Redis is available via various package managers. For example, MacOSX users with Homebrew installed can simply type `brew install redis`.)
+(A titre d'alternative, Redis est dispnible dans plusieurs gestionnaires de
+paquets. Par exemple, les utilisateurs de MacOSX disposant de Homebrew peuvent
+se contenter de tape `brew install redis`.)
 
-If you built it from source, the binary outputs have been placed in the `src` directory. Navigate to the `src` directory by executing `cd src`.
+Si vous avez installé Redis depuis les sources les binaires résultants ont été
+placés dans le répertoire `src`. Rendez-vous dans le répertoire `src` par la
+commande `cd src`.
 
-## Running and Connecting to Redis
+## Lancer Redis et s'y connecter
 
-If everything worked, the Redis binaries should be available at your fingertips. Redis has a handful of executables. We'll focus on the Redis server and the Redis command line interface (a DOS-like client). Let's start the server. In Windows, double click `redis-server`. On *nix/MacOSX run `./redis-server`.
+Si les étapes précédentes ont résussi, les binaires Redis sont dorénavant à
+votre disposition. Redis en comporte quelques-uns. Nous porterons notre 
+attention sur le serveur Redis et l'interface ligne de commande de Redis (un
+client de type DOS). Démarrons le serveur. Sous Windows, ce sera par un double 
+clic sur `redis-server`. Sur *nix/MacOSX en exécutant `./redis-server`.
 
-If you read the start up message you'll see a warning that the `redis.conf` file couldn't be found. Redis will instead use built-in defaults, which is fine for what we'll be doing.
+Si vous prenez le temps de lire le message de démarrage, vous remarquerez un 
+avertissement signalant que le fichier `redis.conf` est introuvable. En son
+absence, Redis utilise les valeurs par défaut, ce qui est tout à fait adéquat
+pour ce que nous allons faire.
 
-Next start the Redis console by either double clicking `redis-cli` (Windows) or running `./redis-cli` (*nix/MacOSX). This will connect to the locally-running server on the default port (6379).
+Lancez maintenant la console Redis en double-cliquant sur `redis-cli` (Windows) 
+ou en exécutant `./redis-cli` (*nix/MacOSX). Celle-ci va se connecter au
+serveur en cours d'exécution sur le port par défaut (6379) de la machine locale.
 
-You can test that everything is working by entering `info` into the command line interface. You'll hopefully see a bunch of key-value pairs which provide a great deal of insight into the server's status.
+Vous pouvez vous assurer que tout est en ordre en entrant la commande `info` à
+la console. Vous devriez optenir en retour un lot de paires clef-valeur 
+fournissant bon nombre d'indicateurs  sur l'état du serveur.
 
-If you are having problems with the above setup I suggest you seek help in the [official Redis support group](https://groups.google.com/forum/#!forum/redis-db).
+Si vous rencontrez des difficultés avec ce déploiement, je vous suggère de 
+chercher de l'aide auprès du 
+[groupe officiel de soutien Redis](https://groups.google.com/forum/#!forum/redis-db).
 
-# Redis Drivers
+# Pilotes Redis
 
-As you'll soon learn, Redis' API is best described as an explicit set of functions. It has a very simple and procedural feel to it. This means that whether you are using the command line tool, or a driver for your favorite language, things are very similar. Therefore, you shouldn't have any problems following along if you prefer to work from a programming language. If you want, head over to the [client page](http://redis.io/clients) and download the appropriate driver.
+Comme vous allez bientôt l'apprendre, la meilleure description de l'API de Redis
+est un jeu de fonctions explicites, avec un caractère élémentaire et procédural.
+Cela signifie que les choses sont très semblables entre la console en ligne de
+commande et le pilote disponible dans votre langage favori. Vous ne devriez donc
+pas rencontrer de difficultés à suivre ce livre dans votre langage de
+prédilection plutôt qu'à la console. Si tel est votre choix, orientez-vous vers
+la [page des clients](http://redis.io/clients) et téléchargez le pilote 
+approprié.
 
 # Chapter 1 - The Basics
 
