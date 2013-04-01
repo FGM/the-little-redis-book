@@ -105,19 +105,18 @@ options sont disponibles. Il n'est pas question de les utiliser en production,
 mais je n'ai personnellement jamais rencontré de limites en développement.
 
 Un portage réalisé par Microsoft Open Technologies, Inc. est disponible sur
-<https://github.com/MSOpenTech/redishttps://github.com/MSOpenTech/redis>. A la 
-date d'écriture de ce livre, cette solution n'est pas prête à être déployée en 
-production.
+<https://github.com/MSOpenTech/redis>. A la date d'écriture de ce livre, cette 
+solution n'est pas prête à être déployée en production.
 
 Une autre solution, déjà disponible depuis quelques années, est disponible sur
 <https://github.com/dmajkic/redis/downloads>. Vous pouvez télécharger la version
 la plus récente (en haut de la liste). Décompressez le fichier zip et, selon
 l'architecture de votre machine, ouvrez le répertoire `64bit` ou `32bit`.
 
-## Sur *nix et MacOSX
+## Sur \*nix et MacOSX
 
 Pour les utilisateurs de systèmes \*nix et Mac, installer à partir des sources
-et la meilleure option. Les instructions, ainsi que le numéro de la version la
+est la meilleure option. Les instructions, ainsi que le numéro de la version la
 plus récente, sont disponibles sur <http://redis.io/download>. A la date de
 rédaction de ce livre, la version la plus récente est la 2.6.2; pour l'installer,
 nous exécuterions donc:
@@ -127,7 +126,7 @@ nous exécuterions donc:
 	cd redis-2.6.2
 	make
 
-(A titre d'alternative, Redis est dispnible dans plusieurs gestionnaires de
+(A titre d'alternative, Redis est disponible dans plusieurs gestionnaires de
 paquets. Par exemple, les utilisateurs de MacOSX disposant de Homebrew peuvent
 se contenter de tape `brew install redis`.)
 
@@ -141,23 +140,23 @@ Si les étapes précédentes ont résussi, les binaires Redis sont dorénavant �
 votre disposition. Redis en comporte quelques-uns. Nous porterons notre 
 attention sur le serveur Redis et l'interface ligne de commande de Redis (un
 client de type DOS). Démarrons le serveur. Sous Windows, ce sera par un double 
-clic sur `redis-server`. Sur *nix/MacOSX en exécutant `./redis-server`.
+clic sur `redis-server`. Sur \*nix/MacOSX en exécutant `./redis-server`.
 
 Si vous prenez le temps de lire le message de démarrage, vous remarquerez un 
 avertissement signalant que le fichier `redis.conf` est introuvable. En son
 absence, Redis utilise les valeurs par défaut, ce qui est tout à fait adéquat
-pour ce que nous allons faire.
+pour ce que nous allons en faire.
 
 Lancez maintenant la console Redis en double-cliquant sur `redis-cli` (Windows) 
-ou en exécutant `./redis-cli` (*nix/MacOSX). Celle-ci va se connecter au
+ou en exécutant `./redis-cli` (\*nix/MacOSX). Celle-ci va se connecter au
 serveur en cours d'exécution sur le port par défaut (6379) de la machine locale.
 
 Vous pouvez vous assurer que tout est en ordre en entrant la commande `info` à
-la console. Vous devriez optenir en retour un lot de paires clef-valeur 
-fournissant bon nombre d'indicateurs  sur l'état du serveur.
+la console. Vous devriez obtenir en retour un lot de paires clef-valeur 
+fournissant bon nombre d'indicateurs sur l'état du serveur.
 
 Si vous rencontrez des difficultés avec ce déploiement, je vous suggère de 
-chercher de l'aide auprès du 
+chercher de l'aide auprès du
 [groupe officiel de soutien Redis](https://groups.google.com/forum/#!forum/redis-db).
 
 # Pilotes Redis
@@ -171,17 +170,48 @@ prédilection plutôt qu'à la console. Si tel est votre choix, orientez-vous ve
 la [page des clients](http://redis.io/clients) et téléchargez le pilote 
 approprié.
 
-# Chapter 1 - The Basics
+# Chapitre 1 - Les bases
 
-What makes Redis special? What types of problems does it solve? What should developers watch out for when using it? Before we can answer any of these questions, we need to understand what Redis is.
+En quoi Redis est-il si particulier ? Quels types de problèmes résoud-il ? A 
+quoi faut-il faire attention en tant que développeur dans son utilisation ? 
+Avant de pouvoir répondre à ces questions, nous devons comprendre ce qu'est 
+Redis.
 
-Redis is often described as an in-memory persistent key-value store. I don't think that's an accurate description. Redis does hold all the data in memory (more on this in a bit), and it does write that out to disk for persistence, but it's much more than a simple key-value store. It's important to step beyond this misconception otherwise your perspective of Redis and the problems it solves will be too narrow.
+Redis est souvent décrit comme un stockage clef-valeur en mémoire persistant. Je
+ne pense pas que ce soit une description exacte. Redis conserve bien toutes les
+données en mémoire (plus de détails dans un moment), et écrit bien tout cela sur
+disque pour la persistance, mais il est bien plus qu'un simple stockage 
+clef-valeur. Il est important de dépasser cette erreur d'appréciation, sans quoi
+votre perspective sur Redis et les problèmes qu'il résoud sera trop étroite. 
 
-The reality is that Redis exposes five different data structures, only one of which is a typical key-value structure. Understanding these five data structures, how they work, what methods they expose and what you can model with them is the key to understanding Redis. First though, let's wrap our heads around what it means to expose data structures.
+Dans les faits, Redis expose cinq structures de données distinctes, dont une 
+seule est typique des systèmes clef-valeur. C'est en comprenant ces cinq 
+structures de données, comment elles fonctionnent, quelles méthodes elles
+exposent, et ce qu'il est possible de modéliser avec qu'il est possible de
+vraiment comprendre Redis. Pour commencer, penchons-nous sur ce que signifie
+exposer des structures de données.
 
-If we were to apply this data structure concept to the relational world, we could say that databases expose a single data structure - tables. Tables are both complex and flexible. There isn't much you can't model, store or manipulate with tables. However, their generic nature isn't without drawbacks. Specifically, not everything is as simple, or as fast, as it ought to be. What if, rather than having a one-size-fits-all structure, we used more specialized structures? There might be some things we can't do (or at least, can't do very well), but surely we'd gain in simplicity and speed?
+Si nous devions appliquer ce concept de structure de données au monde 
+relationnel, nous pourrions dire que les bases de données exposent une seule et
+unique structure de données: la table. Les tables sont à la fois complexes et
+flexibles. Il n'y a pas grand chose qu'elles ne permettent pas de modéliser, 
+enregistrer ou manipuler. Mais leur nature générique n'est pas sans 
+inconvénients. En particulier, une représentation à base de tables n'est pas
+toujours aussi simple ou aussi rapide que possible. Qu'en serait-il si, au lieu
+d'avoir une structure à tout faire, nous utilisions des structures plus 
+spécialisées ? Il se pourrait que certaines choses ne soient plus possible, ou
+du moins plus possibles efficacement, mais nous pourrions certainement gagner en
+simplicité et en rapididé ? 
 
-Using specific data structures for specific problems? Isn't that how we code? You don't use a hashtable for every piece of data, nor do you use a scalar variable. To me, that defines Redis' approach. If you are dealing with scalars, lists, hashes, or sets, why not store them as scalars, lists, hashes and sets? Why should checking for the existence of a value be any more complex than calling `exists(key)` or slower than O(1) (constant time lookup which won't slow down regardless of how many items there are)?
+Utiliser des structures de données pour des problèmes spécifiques ? N'est-ce pas
+précisement comment nous programmons ? Personne n'utilise un tableau associatif
+pour tous les types de données, pas plus qu'une variable scalaire. Pour moi, 
+c'est ce point qui définit l'approche de Redis. Si vous manipulez des scalaires,
+des listes, des tableaux associatifs, ou des ensembles, pourquoi ne pas les
+enregistrer comme des scalaires, des listes, des tableaux associatifs, ou des 
+ensembles ? Pourquoi vérifier l'existence d'une valeur devrait-il être plus
+complexe que d'appeler `exists(clef)` ou plus lent que O(1) (un accès en temps 
+constant qui ne va pas ralentir quel que soit le nombre de données présentes) ?
 
 # The Building Blocks
 
