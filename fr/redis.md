@@ -495,14 +495,21 @@ précédemment : enregistrer des objets (complexes ou non) et des compteurs.
 Enfin, puisque l'accès à une valeur à partir de sa clef est si rapide, les 
 chaînes sont souvent utilisées comme antémémoire de données.
 
-## Hashes
+## Les tableaux associatifs
 
-Hashes are a good example of why calling Redis a key-value store isn't quite accurate. You see, in a lot of ways, hashes are like strings. The important difference is that they provide an extra level of indirection: a field. Therefore, the hash equivalents of `set` and `get` are:
+Les tableaux associatifs sont un bon exemple des raisons pour lesquelles 
+désigner Redis comme un stockage clef-valeur n'est pas pleinement exact. 
+Voyez-vous, par bien des aspects, les tableaux associatifs sont comme les 
+chaînes. La différence de taille entre les deux est le fait qu'ils fournissent 
+un niveau d'indirection supplémentaire: un champ. De ce fait, les équivalents de
+`set` et `get` pour les tableaux associatifs sont:
 
 	hset users:goku powerlevel 9000
 	hget users:goku powerlevel
 
-We can also set multiple fields at once, get multiple fields at once, get all fields and values, list all the fields or delete a specific field:
+Nous pouvons aussi affecter plusieurs champs à la fois, relire plusieurs champs 
+à la fois, récupérer tous les champs et toutes les valeurs, lister tous les
+champs, ou détruire un champ spécifique:
 
 	hmset users:goku race saiyan age 737
 	hmget users:goku race powerlevel
@@ -510,9 +517,20 @@ We can also set multiple fields at once, get multiple fields at once, get all fi
 	hkeys users:goku
 	hdel users:goku age
 
-As you can see, hashes give us a bit more control over plain strings. Rather than storing a user as a single serialized value, we could use a hash to get a more accurate representation. The benefit would be the ability to pull and update/delete specific pieces of data, without having to get or write the entire value.
+Comme vous pouvez le voir, les tableaux associatifs nous apportent un peu plus 
+de contrôle que les simples chaînes. Plutôt que de stocker l'utilisateur comme
+une valeur sérialisée unique, nous pourrions utiliser un tableau associatif pour
+obtenir une représentation plus précise. L'avantage en serait l'aptitude à 
+retirer et mettre à jour/supprimer des parties spécifiques des données, sans 
+avoir à récupérer ou enregistrer la donnée entière.
 
-Looking at hashes from the perspective of a well-defined object, such as a user, is key to understanding how they work. And it's true that, for performance reasons, more granular control might be useful. However, in the next chapter we'll look at how hashes can be used to organize your data and make querying more practical. In my opinion, this is where hashes really shine.
+C'est en considérant les tableaux associatifs sous l'angle d'un objet bien 
+défini, comme un utilisateur, que l'on peut comprendre comment ils fonctionnent.
+Et il est vrai que, pour des raisons de performances, il pourrait être utile de 
+disposer d'une granularité de contrôle plus fine. Néanmoins, au prochain 
+chapitre, nous verrons comment les tableaux associatifs peuvent être utilisés 
+pour organiser vos données et rendre le requêtage plus pratique. A mon sens, 
+c'est là le point fort des tableaux associatifs.
 
 ## Lists
 
