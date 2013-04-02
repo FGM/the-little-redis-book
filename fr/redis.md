@@ -532,23 +532,40 @@ chapitre, nous verrons comment les tableaux associatifs peuvent être utilisés
 pour organiser vos données et rendre le requêtage plus pratique. A mon sens, 
 c'est là le point fort des tableaux associatifs.
 
-## Lists
+## Les listes
 
-Lists let you store and manipulate an array of values for a given key. You can add values to the list, get the first or last value and manipulate values at a given index. Lists maintain their order and have efficient index-based operations. We could have a `newusers` list which tracks the newest registered users to our site:
+Les listes vous permettent d'enregistrer et manipuler un tableau de valeurs
+associé à une clef. Vous pouvez ajouter des valeurs à la liste, récupérer la
+première ou la dernière valeur, et manipuler les valeurs à un indice donné. Vous
+Les listes restent ordonnées et disposent d'opérations efficaces basées sur les
+indices. Nous pourrions créer une liste `newusers` qui conserve la trace des
+derniers utilisateurs inscrits sur le site:
 
 	lpush newusers goku
-	ltrim newusers 0 50
+	ltrim newusers 0 49
 
-First we push a new user at the front of the list, then we trim it so that it only contains the last 50 users. This is a common pattern. `ltrim` is an O(N) operation, where N is the number of values we are removing. In this case, where we always trim after a single insert, it'll actually have a constant performance of O(1) (because N will always be equal to 1).
+Nous commençons par pousser un nouvel utilisateur à l'avant de la liste, puis 
+nous le retaillons pour qu'elle ne contienne que les 50 derniers utilisateurs
+inscrits. C'est là un motif courant. `ltrim` est une opération en O(N), où N 
+est le nombre de valeurs à supprimer. Dans ce cas précis, où nous retaillons 
+toujours après une seule insertion, sa performance sera donc constante en O(1)
+(puisque N sera toujours égal à 1).
 
-This is also the first time that we are seeing a value in one key referencing a value in another. If we wanted to get the details of the last 10 users, we'd do the following combination:
+C'est aussi la première fois que nous voyons la valeur associée à une clef
+référencer la valeur associée à une autre. Si nous voulions récupérer les 
+détails des 10 derniers inscrits, nous exécuterions la combinaison suivante:
 
 	keys = redis.lrange('newusers', 0, 10)
 	redis.mget(*keys.map {|u| "users:#{u}"})
 
-The above is a bit of Ruby which shows the type of multiple roundtrips we talked about before.
+Le fragment de code Ruby ci-dessus illustre le type d'aller-retours évoqués plus
+haut.
 
-Of course, lists aren't only good for storing references to other keys. The values can be anything. You could use lists to store logs or track the path a user is taking through a site. If you were building a game, you might use it to track a queued user actions.
+Bien entendu, les listes ne sont pas seulement bonnes à conserver des références
+vers d'autres clefs. Les valeurs peuvent être de toute nature. Vous pourriez
+utiliser les listes pour enregistrer des journaux d'accès, ou le parcours d'un 
+utilisateur sur un site. Si vous êtes créateur de jeux, vous pourriez utiliser 
+une liste pour garder la trace des actions en attente pour l'utilisateur.
 
 ## Sets
 
