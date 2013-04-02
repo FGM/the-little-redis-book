@@ -122,10 +122,10 @@ plus récente, sont disponibles sur <http://redis.io/download>. A la date de
 rédaction de ce livre, la version la plus récente est la 2.6.2; pour 
 l'installer, nous exécuterions donc:
 
-  wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
-  tar xzf redis-2.6.2.tar.gz
-  cd redis-2.6.2
-  make
+    wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
+    tar xzf redis-2.6.2.tar.gz
+    cd redis-2.6.2
+    make
 
 (A titre d'alternative, Redis est disponible dans plusieurs gestionnaires de
 paquets. Par exemple, les utilisateurs de MacOSX disposant de Homebrew peuvent
@@ -257,7 +257,7 @@ des entiers et des JSON.
 
 Plongeons un peu les mains dans le cambouis. Entrez la commande suivante:
 
-  set users:leto "{name: leto, planet: dune, likes: [spice]}"
+    set users:leto "{name: leto, planet: dune, likes: [spice]}"
 
 Ceci est l'anatomie de base d'une commande Redis. Elle commence par la commande
 proprement dite, dans le cas présent `set`. Viennent ensuite ses paramètres. La
@@ -268,7 +268,7 @@ premier paramètre). Pouvez-vous deviner comment retrouver cette valeur ?
 Espérons que vous avez répondu (mais ne vous inquiétez pas si vous aviez un 
 doute):
 
-  get users:leto
+    get users:leto
 
 Continuez en jouant avec d'autres combinaisons. Les clefs et valeurs sont des
 concepts fondamentaux, et les commandes `get` et `set` sont le moyen le plus
@@ -389,12 +389,9 @@ d'elles-mêmes.
 Ce qu'il faut retenir de ce chapitre:
 
 * Le clefs sont des chaînes de caractères qui identifient des données (valeurs)
-
 * Les valeurs sont des tableaux d'octets arbitraires que Redis n'interprète pas
-
 * Redis expose (et est mis en &oelig;uvre comme) cinq structures de données 
 spécialisées
-
 * Ces trois points combinés font que Redis est rapide et simple d'utilisation,
 mais pas adapté à tous les scénarios d'utilisation possibles.
 
@@ -423,44 +420,80 @@ Il n'y a rien de plus important que de prendre plaisir à essayer les choses.
 Vous pouvez toujours effacer toutes les données de votre base de données avec la
 commande `flushdb`, alors ne soyez pas timides et lâchez vous!
 
-## Strings
+## Les chaînes 
 
-Strings are the most basic data structures available in Redis. When you think of a key-value pair, you are thinking of strings. Don't get mixed up by the name, as always, your value can be anything. I prefer to call them "scalars", but maybe that's just me.
+Les chaînes sont la structure de données la plus basique disponible dans Redis. 
+Lorsque vous pensez à une paire clef-valeur, c'est à une chaîne que vous pensez. 
+Ne vous fiez pas à leur nom : comme toujours, la valeur peut être quelconque. Je 
+préfère les appeler &laquo;scalaires&raquo;, mais ce n'est que mon avis 
+personnel.
 
-We already saw a common use-case for strings, storing instances of objects by key. This is something that you'll make heavy use of:
+Nous avons déjà rencontré un cas d'utilisation courant pour les chaînes : 
+l'enregistrement d'instances d'objets identifiés par une clef. C'est là quelque 
+chose dont vous ferez un usage massif :
 
-	set users:leto "{name: leto, planet: dune, likes: [spice]}"
+    set users:leto "{name: leto, planet: dune, likes: [spice]}"
 
-Additionally, Redis lets you do some common operations. For example `strlen <key>` can be used to get the length of a key's value; `getrange <key> <start> <end>` returns the specified range of a value; `append <key> <value>` appends the value to the existing value (or creates it if it doesn't exist already). Go ahead and try those out. This is what I get:
+En complément, Redis vous permet de réaliser quelques opérations courantes. 
+Ainsi, `strlen <key>` renvoie la longueur de la valeur associée à une clef ; 
+`getrange <key> <start> <end>` renvoie une sous-chaîne d'une valeur ; 
+`append <key> <value>` ajoute la valeur à la valeur préexistante (ou la crée si 
+elle n'existe pas encore). Allez-y, essayez-les. Voici ce que j'obtiens:
 
-	> strlen users:leto
-	(integer) 42
+    > strlen users:leto
+    (integer) 42
 
-	> getrange users:leto 27 40
-	"likes: [spice]"
+    > getrange users:leto 27 40
+    "likes: [spice]"
 
-	> append users:leto " OVER 9000!!"
-	(integer) 54
+    > append users:leto " OVER 9000!!"
+    (integer) 54
 
-Now, you might be thinking, that's great, but it doesn't make sense. You can't meaningfully pull a range out of JSON or append a value. You are right, the lesson here is that some of the commands, especially with the string data structure, only make sense given specific type of data.
+A ce stade, vous vous dites probablement que tout cela est bel et bon, mais n'a 
+aucun sens. Vous ne pouvez pas extraire une sous-chaîne d'un JSON ou lui ajouter 
+une valeur. Vous êtes dans le vrai, la leçon à en retirer est que certaines des 
+commandes, en particulier liées à la structure de données chaîne, n'ont de sens 
+que pour certains types de données.
 
-Earlier we learnt that Redis doesn't care about your values. Most of the time that's true. However, a few string commands are specific to some types or structure of values. As a vague example, I could see the above `append` and `getrange` commands being useful in some custom space-efficient serialization. As a more concrete example I give you the `incr`, `incrby`, `decr` and `decrby` commands. These increment or decrement the value of a string:
+Nous avons appris précédemment que Redis ne s'occupe pas de vos valeurs. La 
+plupart du temps, c'est exact. Néanmoins, un petit nombre de commandes liées aux 
+chaînes sont spécifiques à certains types de structures de valeurs. A titre 
+d’exemple vague, je verrais bien les commandes `append` et `getrange` être 
+utiles à certaines sérialisations personnalisées pour être efficaces en 
+occupation d'espace. Comme exemple plus concret, considérez les commandes 
+`incr`, `incrby`, `decr` et `decrby`. Elles ont pour effet d'incrémenter ou 
+décrémenter la valeur d'une chaîne.:
 
-	> incr stats:page:about
-	(integer) 1
-	> incr stats:page:about
-	(integer) 2
+    > incr stats:page:about
+    (integer) 1
+    > incr stats:page:about
+    (integer) 2
 
-	> incrby ratings:video:12333 5
-	(integer) 5
-	> incrby ratings:video:12333 3
-	(integer) 8
+    > incrby ratings:video:12333 5
+    (integer) 5
+    > incrby ratings:video:12333 3
+    (integer) 8
 
-As you can imagine, Redis strings are great for analytics. Try incrementing `users:leto` (a non-integer value) and see what happens (you should get an error).
+Comme vous pouvez l'imaginer, les chaînes Redis sont idéales pour 
+l'enregistrement de statistiques de fréquentation. Essayez d'incrémenter 
+`users:leto` (dont la valeur n'est pas un entier) et observez ce qui se passe 
+(vous devriez obtenir un message d'erreur).
 
-A more advanced example is the `setbit` and `getbit` commands. There's a [wonderful post](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) on how Spool uses these two commands to efficiently answer the question "how many unique visitors did we have today". For 128 million users a laptop generates the answer in less than 50ms and takes only 16MB of memory.
+Les commandes `setbit` et `getbit` sont le support d'un cas d'utilisation 
+remarquable. Il y a un 
+[article merveilleux](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) 
+sur la façon dont Spool utilise ces deux commandes pour répondre de façon 
+efficace à la question &laquo;combien de visiteurs uniques avons-nous eu 
+aujourd'hui?&raquo;. Pour 128 millions d'utilisateurs, un portable renvoie la 
+réponse en moins de 50ms et nécessite moins de 16Mo de mémoire.
 
-It isn't important that you understand how bitmaps work, or how Spool uses them, but rather to understand that Redis strings are more powerful than they initially seem. Still, the most common cases are the ones we gave above: storing objects (complex or not) and counters. Also, since getting a value by key is so fast, strings are often used to cache data.
+Comprendre la façon dont les masques de bits fonctionnent, ou comment Spool les 
+utilise, n'est pas l'important. Ce qui l'est, c'est de comprendre que les 
+chaînes Redis sont plus puissantes qu'elles n'en ont l'air au départ. Néanmoins, 
+les cas d'utilisation les plus courants sont ceux que nous avons listés 
+précédemment : enregistrer des objets (complexes ou non) et des compteurs. 
+Enfin, puisque l'accès à une valeur à partir de sa clef est si rapide, les 
+chaînes sont souvent utilisées comme antémémoire de données.
 
 ## Hashes
 
