@@ -14,7 +14,7 @@ EPUB_BUILDER_FLAGS = \
 MOBI_BUILDER = kindlegen
 
 
-en/redis.pdf:
+en/redis.pdf: en/redis.md common/pdf-template.tex
 	cd en && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME) -o $(BOOK_FILE_NAME).pdf
 
 en/redis.epub: en/title.png en/title.txt en/redis.md
@@ -23,7 +23,7 @@ en/redis.epub: en/title.png en/title.txt en/redis.md
 en/redis.mobi: en/redis.epub
 	$(MOBI_BUILDER) $^
 
-fr/redis.pdf:
+fr/redis.pdf: fr/redis.md common/pdf-template.tex
 	cd fr && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME) -o $(BOOK_FILE_NAME).pdf
 
 fr/redis.epub: fr/title.png fr/title.txt fr/redis.md
