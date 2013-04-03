@@ -319,7 +319,7 @@ L'implication évidente de ceci est le coût de l'utilisation de Redis: la mémo
 vive est toujours la part la plus coûteuse du matériel des serveurs.
 
 J'ai le sentiment que certains développeurs ont perdu le contact avec le peu 
-d'espace que les données peuvent nécessiter. Les &oelig;uvres complètes de 
+d'espace que les données peuvent nécessiter. Les œuvres complètes de 
 William Shakespeare occupent environ 5.5&nbsp;Mo de stockage. Pour ce qui est de 
 la capacité de monter en charge, d'autres solutions tendent à être limitées par 
 les E/S ou le processeur. Laquelle de ces deux limitations (mémoire ou E/S) vous
@@ -335,7 +335,7 @@ Redis a ajouté le soutien de la mémoire virtuelle. Néanmoins cette capacité 
 été considérée comme un échec (par les propres développeurs de Redis) et son
 utilisation est dorénavant déconseillée. 
 
-(Accessoirement, remarque que le fichier de 5.5 Mo des &oelig;uvres complètes de
+(Accessoirement, remarque que le fichier de 5.5 Mo des œuvres complètes de
 Shakespeare peut être compressé à environ 2 Mo. Redis ne pratique pas la 
 compression automatique mais, puisqu'il traite les valeurs comme des octets, il
 n'y a rien pour vous empêcher de compresser/décompresser vos données 
@@ -390,7 +390,7 @@ Ce qu'il faut retenir de ce chapitre:
 
 * Le clefs sont des chaînes de caractères qui identifient des données (valeurs)
 * Les valeurs sont des tableaux d'octets arbitraires que Redis n'interprète pas
-* Redis expose (et est mis en &oelig;uvre comme) cinq structures de données 
+* Redis expose (et est mis en œuvre comme) cinq structures de données 
 spécialisées
 * Ces trois points combinés font que Redis est rapide et simple d'utilisation,
 mais pas adapté à tous les scénarios d'utilisation possibles.
@@ -716,7 +716,7 @@ occupe deux fois l'espace mémoire nécessaire.
 Il serait pratique que Redis permette de lier une clef à une autre, mais ce 
 n'est pas le cas (et ne le sera probablement jamais). L'une des dominantes du 
 développement de Redis est de conserver un code et une API propres et simples.
-La mise en @oelig;uvre interne des clefs de liaison (il y a beaucoup de choses 
+La mise en œuvre interne des clefs de liaison (il y a beaucoup de choses 
 possibles avec les clefs dont nous n'avons pas encore parlé) ne se justifie pas
 lorsqu'on prend en considération le fait que Redis fournit déjà une solution: 
 les tableaux associatifs.
