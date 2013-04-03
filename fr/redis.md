@@ -567,27 +567,35 @@ utiliser les listes pour enregistrer des journaux d'accès, ou le parcours d'un
 utilisateur sur un site. Si vous êtes créateur de jeux, vous pourriez utiliser 
 une liste pour garder la trace des actions en attente pour l'utilisateur.
 
-## Sets
+## Les ensembles
 
-Set are used to store unique values and provide a number of set-based operations, like unions. Sets aren't ordered but they provide efficient value-based operations. A friend's list is the classic example of using a set:
+Les ensembles servent à enregistrer des valeurs uniques et fournissent un 
+certain nombre d'opérations ensemblistes, comme l'union. Les ensembles ne sont
+pas ordonnés, mais ils fournisseurs des opérations efficaces sur les valeurs.
+Un exemple classique d'utilisation d'un ensemble est une liste d'amis:
 
 	sadd friends:leto ghanima paul chani jessica
 	sadd friends:duncan paul jessica alia
 
-Regardless of how many friends a user has, we can efficiently tell (O(1)) whether userX is a friend of userY or not:
+Quel que soit le nombre d'amis d'un utilisateur, nous pouvons dire efficacement
+(O(1)) si `userX` est un ami de `userY` ou non:
 
 	sismember friends:leto jessica
 	sismember friends:leto vladimir
 
-Furthermore we can see what two or more people share the same friends:
+De plus, nous pouvons voir si deux utilisateurs ou plus partagent les mêmes 
+amis:
 
 	sinter friends:leto friends:duncan
 
-and even store the result at a new key:
+...et même enregistrer le résultat sous une nouvelle clef:
 
 	sinterstore friends:leto_duncan friends:leto friends:duncan
 
-Sets are great for tagging or tracking any other properties of a value for which duplicates don't make any sense (or where we want to apply set operations such as intersections and unions).
+Les ensembles sont pratiques pour l'étiquetage (tagging) ou le suivi des
+propriétés d'une valeur pour lesquelles les doublons n'auraient pas de sens (ou
+sur lesquelles nous voulons appliquer des opérations ensemblistes comme les
+intersections et les unions).
 
 ## Sorted Sets
 
