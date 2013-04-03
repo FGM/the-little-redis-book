@@ -597,25 +597,43 @@ propriétés d'une valeur pour lesquelles les doublons n'auraient pas de sens (o
 sur lesquelles nous voulons appliquer des opérations ensemblistes comme les
 intersections et les unions).
 
-## Sorted Sets
+## Ensembles ordonnés
 
-The last and most powerful data structure are sorted sets. If hashes are like strings but with fields, then sorted sets are like sets but with a score. The score provides sorting and ranking capabilities. If we wanted a ranked list of friends, we might do:
+La dernière et la plus puissante des structures de données de Redis est
+l'ensemble ordonné. Si l'on veut comparer les tableaux associatifs à des chaînes
+pourvues de champs, les ensembles ordonnés sont comme des ensembles pourvus de 
+scores. Le score fournit des mécanismes de tri et ordonnancement. Pour obtenir
+une liste d'amis, nous pourrions procéder comme ceci:
 
 	zadd friends:duncan 70 ghanima 95 paul 95 chani 75 jessica 1 vladimir
 
-Want to find out how many friends `duncan` has with a score of 90 or over?
+Et pour trouver combien `duncan` a d'amis avec un score de 90 ou plus ?
 
 	zcount friends:duncan 90 100
 
-How about figuring out `chani`'s rank?
+Ou bien connaître le rang de classement de `chani` ?
 
 	zrevrank friends:duncan chani
 
-We use `zrevrank` instead of `zrank` since Redis' default sort is from low to high (but in this case we are ranking from high to low). The most obvious use-case for sorted sets is a leaderboard system. In reality though, anything you want sorted by an some integer, and be able to efficiently manipulate based on that score, might be a good fit for a sorted set.
+Nous utilisons `zrevrank` au lieu de `zrank` car le tri par défaut de Redis est
+par score croissant, alors que dans cet exemple nous trions par score
+décroissant. Le cas d'utilisation le plus évident des ensembles ordonnés est un
+système de tableau de classement de jeu. Dans la réalité, toutefois, toute 
+donnée susceptible d'être triée par un nombre entier et que vous souhaitez
+manipuler sur la base de cet entier, est une bonne candidate pour une 
+représentation en ensemble ordonné.
 
-## In This Chapter
+## Dans ce chapitre
 
-That's a high level overview of Redis' five data structures. One of the neat things about Redis is that you can often do more than you first realize. There are probably ways to use string and sorted sets that no one has thought of yet. As long as you understand the normal use-case though, you'll find Redis ideal for all types of problems. Also, just because Redis exposes five data structures and various methods, don't think you need to use all of them. It isn't uncommon to build a feature while only using a handful of commands.
+Nous avons survolé de loin les cinq structures de données de Redis. L'un des
+aspects plaisants de Redis est que l'on peut souvent réaliser plus qu'on ne
+l'imagine au premier abord. Il y a certainement des façons d'utiliser les 
+chaînes et les ensembles ordonnés auxquelles personne n'a encore pensé. Pour 
+autant, dès lors que vous comprenez le cas d'utilisation normal, vous pouvez
+découvrir que Redis est idéal pour des problèmes de toutes sortes. De même, ce
+n'est pas parce que Redis expose cinq structures de données et de nombreuses
+méthodes que vous avez besoin de toutes les utiliser. Il n'est pas rare de
+réaliser une fonctionnalité en n'utilisant que quelques commandes.
 
 # Chapter 3 - Leveraging Data Structures
 
