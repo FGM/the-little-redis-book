@@ -635,30 +635,69 @@ n'est pas parce que Redis expose cinq structures de données et de nombreuses
 méthodes que vous avez besoin de toutes les utiliser. Il n'est pas rare de
 réaliser une fonctionnalité en n'utilisant que quelques commandes.
 
-# Chapter 3 - Leveraging Data Structures
+# Chapitre 3 - Tirer parti des structures de données
 
-In the previous chapter we talked about the five data structures and gave some examples of what problems they might solve. Now it's time to look at a few more advanced, yet common, topics and design patterns.
+Au cours du chapitre précédent, nous avons présenté les cinq structures de 
+données de Redis et donné quelques exemples des problèmes qu'elles pouvaient
+résoudre. Il est maintenant temps de se pencher sur des sujets et patrons de
+conceptions plus avancés, quoique courants.
 
-## Big O Notation
+## Notation Grand O
 
-Throughout this book we've made references to the Big O notation in the form of O(n) or O(1). Big O notation is used to explain how something behaves given a certain number of elements. In Redis, it's used to tell us how fast a command is based on the number of items we are dealing with.
+Tout au long de ce livre, nous avons fait référence à la notation Grand O, sous
+la forme O(n) ou O(1). La notation Grand O est utilisée pour expliquer comment
+quelque chose se comporte en fonction d'un nombre d'éléments. Dans Redis, elle
+est utilisée pour indiquer la rapidité d'une commande en fonction du nombre
+d'éléments qu'elle doit traiter.
 
-Redis documentation tells us the Big O notation for each of its commands. It also tells us what the factors are that influence the performance. Let's look at some examples.
+La documentation Redis indique la notation Grand O pour chaque commande. Elle
+indique également quels sont les facteurs qui influent sur la performance. 
+Prenons quelques exemples.
 
-The fastest anything can be is O(1) which is a constant. Whether we are dealing with 5 items or 5 million, you'll get the same performance. The `sismember` command, which tells us if a value belongs to a set, is O(1). `sismember` is a powerful command, and its performance characteristics are a big reason for that. A number of Redis commands are O(1).
+La rapidité la plus grande est O(1) qui est une constante. Que nous traitions 5
+éléments ou 5 millions, la performance sera la même. La commande `sismember`, 
+qui indique si une valeur appartient à un ensemble est en O(1). `sismember` est
+une commande puissante, en partie à cause de son profil de performance. Nombre 
+de commandes Redis sont en O(1).
 
-Logarithmic, or O(log(N)), is the next fastest possibility because it needs to scan through smaller and smaller partitions. Using this type of divide and conquer approach, a very large number of items quickly gets broken down in a few iterations. `zadd` is a O(log(N)) command, where N is the number of elements already in the set.
+La performance logarithmique, ou O(log(N)) est la deuxième plus rapide, parce 
+qu'elle a besoin de parcourir des partitions de plus en plus petites. En 
+utilisant une approche &laquo;diviser pour régner&raquo;, il est possible de
+parcourir un très grand nombre d'éléments en quelques itérations. `zadd` est une
+commande en O(log(N)), où N est le nombre d'éléments déjà présents dans 
+l'ensemble.
 
-Next we have linear commands, or O(N). Looking for a non-indexed column in a table is an O(N) operation. So is using the `ltrim` command. However, in the case of `ltrim`, N isn't the number of elements in the list, but rather the elements being removed. Using `ltrim` to remove 1 item from a list of millions will be faster than using `ltrim` to remove 10 items from a list of thousands. (Though they'll probably both be so fast that you wouldn't be able to time it.)
+Au degré suivant, nous trouvons les commandes à performance linéaire, ou O(N).
+Rechercher une colonne non indexée dans une table est une opération en O(N). De
+même pour la commande `ltrim`. Toutefois, pour ce qui est de `ltrim`, N n'est 
+pas le nombre d'éléments de la liste, mais le nombre d'éléments supprimés.
+Utiliser `ltrim` pour supprimer un élément d'une liste de millions d'éléments
+sera plus rapide que l'utiliser pour retirer 10 éléments d'une liste de milliers
+d'éléments. (Encore que le deux soient encore probablement tellement rapides que
+vous ne pourrez pas les chronométrer).
 
-`zremrangebyscore` which removes elements from a sorted set with a score between a minimum and a maximum value has a complexity of O(log(N)+M). This makes it a mix. By reading the documentation we see that N is the number of total elements in the set and M is the number of elements to be removed. In other words, the number of elements that'll get removed is probably going to be more significant, in terms of performance, than the total number of elements in the set.
+`zremrangebyscore` qui supprime les éléments d'un ensemble ordonné dont le score
+est contenu entre des valeurs minimale et maximale a une complexité O(log(N)+M). 
+Cela en fait une combinaison. La documentation nous indique que N est le nombre
+d'éléments de l'ensemble et M le nombre d'éléments à supprimer. En d'autre 
+termes, le nombre d'éléments qui seront supprimés sera probablement plus
+significatif, en termes de performances, que le nombre total d'éléments de 
+l'ensemble.
 
-The `sort` command, which we'll discuss in greater detail in the next chapter has a complexity of O(N+M*log(M)). From its performance characteristic, you can probably tell that this is one of Redis' most complex commands.
+La commande `sort`, que nous examinerons plus en détail au prochain chapitre, a
+une complexité en O(N+M*log(M)). Au vu de ses caractéristiques de performance,
+vous pouvez probablement imaginer que c'est l'une des commandes les plus 
+complexes de Redis.
 
-There are a number of other complexities, the two remaining common ones are O(N^2) and O(C^N). The larger N is, the worse these perform relative to a smaller N. None of Redis' commands have this type of complexity.
+D'autres complexités existent, les deux autres les plus courantes étant O(N^2) 
+et O(C^N). Plus N est élevé, plus ces commandes ralentiront par rapport à de 
+plus petites valeurs de N. Aucune des commandes de Redis n'a une complexité de
+ce type.
 
-It's worth pointing out that the Big O notation deals with the worst case. When we say that something takes O(N), we might actually find it right away or it might be the last possible element.
-
+Il est bon de signaler que la notation Grand O ne décrit que le pire cas. 
+Lorsque le coût d'une opération est en O(N), il est tout à fait possible que le
+résultat soit obtenu sans délai, comme il est possible qu'il n'arrive qu'au 
+dernier élément.
 
 ## Pseudo Multi Key Queries
 
