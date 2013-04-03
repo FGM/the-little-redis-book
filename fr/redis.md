@@ -699,32 +699,49 @@ Lorsque le coût d'une opération est en O(N), il est tout à fait possible que 
 résultat soit obtenu sans délai, comme il est possible qu'il n'arrive qu'au 
 dernier élément.
 
-## Pseudo Multi Key Queries
+## Requêtes sur pseudo clefs multiples
 
-A common situation you'll run into is wanting to query the same value by different keys. For example, you might want to get a user by email (for when they first log in) and also by id (after they've logged in). One horrible solution is to duplicate your user object into two string values:
+Une situation courante que vous rencontrerez est d'avoir à interroger la même
+valeur à partir de diverses clefs. Par exemple, vous pourriez vouloir retrouver
+un utilisateur par son adresse électronique (lorsqu'il se connecte pour la 
+première fois), ou par identifiant (une fois qu'il est connecté). Une solution
+horrible consiste à dupliquer votre objet utilisateur dans deux valeurs chaînes:
 
 	set users:leto@dune.gov "{id: 9001, email: 'leto@dune.gov', ...}"
 	set users:9001 "{id: 9001, email: 'leto@dune.gov', ...}"
 
-This is bad because it's a nightmare to manage and it takes twice the amount of memory.
+C'est une mauvaise stratégie parce qu'elle est un cauchemar à gérer et qu'elle
+occupe deux fois l'espace mémoire nécessaire.
 
-It would be nice if Redis let you link one key to another, but it doesn't (and it probably never will). A major driver in Redis' development is to keep the code and API clean and simple. The internal implementation of linking keys (there's a lot we can do with keys that we haven't talked about yet) isn't worth it when you consider that Redis already provides a solution: hashes.
+Il serait pratique que Redis permette de lier une clef à une autre, mais ce 
+n'est pas le cas (et ne le sera probablement jamais). L'une des dominantes du 
+développement de Redis est de conserver un code et une API propres et simples.
+La mise en @oelig;uvre interne des clefs de liaison (il y a beaucoup de choses 
+possibles avec les clefs dont nous n'avons pas encore parlé) ne se justifie pas
+lorsqu'on prend en considération le fait que Redis fournit déjà une solution: 
+les tableaux associatifs.
 
-Using a hash, we can remove the need for duplication:
+En utilisant un tableau associatif, nous pouvons supprimer la nécessité d'une
+duplication:
 
 	set users:9001 "{id: 9001, email: leto@dune.gov, ...}"
 	hset users:lookup:email leto@dune.gov 9001
 
-What we are doing is using the field as a pseudo secondary index and referencing the single user object. To get a user by id, we issue a normal `get`:
+Ce que nous faisons est utiliser le champ comme un pseudo index secondaire et
+référencer l'objet utilisateur unique. Pour récupérer l'objet utilisateur par 
+son identifiant, nous utilisons un `get` normal:
 
 	get users:9001
 
-To get a user by email, we issue an `hget` followed by a `get` (in Ruby):
+Pour récupérer l'objet utilisateur à partir de son adresse électronique, nous
+utilisons un `hget` suivi d'un `get` (ici en Ruby):
 
 	id = redis.hget('users:lookup:email', 'leto@dune.gov')
 	user = redis.get("users:#{id}")
 
-This is something that you'll likely end up doing often. To me, this is where hashes really shine, but it isn't an obvious use-case until you see it.
+C'est une logique que vous allez probablement utiliser souvent. Pour moi, c'est
+ce à quoi les tableaux associatifs excellent, mais ce n'est pas un cas 
+d'utilisation évident jusqu'au moment où vous le rencontrez.
 
 ## References and Indexes
 
