@@ -743,23 +743,49 @@ C'est une logique que vous allez probablement utiliser souvent. Pour moi, c'est
 ce à quoi les tableaux associatifs excellent, mais ce n'est pas un cas 
 d'utilisation évident jusqu'au moment où vous le rencontrez.
 
-## References and Indexes
+## Références et Index
 
-We've seen a couple examples of having one value reference another. We saw it when we looked at our list example, and we saw it in the section above when using hashes to make querying a little easier. What this comes down to is essentially having to manually manage your indexes and references between values. Being honest, I think we can say that's a bit of a downer, especially when you consider having to manage/update/delete these references manually. There is no magic solution to solving this problem in Redis.
+Nous avons vu quelques exemples où une valeur faisait référence à une autre.
+Nous l'avons vu dans l'exemple illustrant les listes, et nous l'avons vu de
+nouveau dans la section précédente à propos de l'utilisation des tableaux
+associatifs pour rendre le requêtage un peu plus facile. La conclusion de tout
+ceci est qu'avez Redis vous devez essentiellement gérer manuellement vos index
+et les références entre valeurs. Pour être honnête, je pense que nous pouvons
+admettre que c'est un peu décevant, en particulier lorsqu'il faut prendre en
+compte la nécessite de gérer/mettre à jour/supprimer ces références 
+manuellement. Redis ne contient aucune solution magique pour résoudre ce 
+problème. 
 
-We already saw how sets are often used to implement this type of manual index:
+Nous avons déjà vu que les ensembles sont souvent utilisés pour mettre en œuvre
+ce type d'index manuel: 
 
 	sadd friends:leto ghanima paul chani jessica
 
-Each member of this set is a reference to a Redis string value containing details on the actual user. What if `chani` changes her name, or deletes her account? Maybe it would make sense to also track the inverse relationships:
+Chaque élément de cet ensemble est une référence à une valeur chaîne Redis 
+contenant les informations détaillées sur l'utilisateur concerné. Que va-t-il se
+passer si `chani` change de nom, ou détruit son compte ? Peut-être serait-il
+prudent de garder aussi une trace des relations inverses:
 
 	sadd friends_of:chani leto paul
 
-Maintenance cost aside, if you are anything like me, you might cringe at the processing and memory cost of having these extra indexed values. In the next section we'll talk about ways to reduce the performance cost of having to do extra round trips (we briefly talked about it in the first chapter).
+Sans même considérer le coût de maintenant, si vous êtes un tant soit peu comme
+moi, vous est susceptible de grincer des dents devant le coût en traitement et
+en mémoire de ces valeurs indexées supplémentaires. Dans la prochaine section,
+nous allons parler de façons de réduire le coût en performance lié au fait de
+devoir faire des aller-retours supplémentaires (nous en avons brièvement parlé
+au premier chapitre). 
 
-If you actually think about it though, relational databases have the same overhead. Indexes take memory, must be scanned or ideally seeked and then the corresponding records must be looked up. The overhead is neatly abstracted away (and they  do a lot of optimizations in terms of the processing to make it very efficient).
+Cela dit, si vous y réfléchissez un peu: les bases de données relationnels
+souffrent de la même surcharge de travail. Les index occupent de la mémoire,
+il faut parcourir, ou idéalement accéder directement aux index, et en bout de
+chaîne, charger les enregistrements concernés. Ce surcroît d'activité est 
+élégamment masqué par l'abstraction relationnelle (et les moteurs réalisent de
+nombreuses optimisations pour que ces traitements soient très efficaces). 
 
-Again, having to manually deal with references in Redis is unfortunate. But any initial concerns you have about the performance or memory implications of this should be tested. I think you'll find it a non-issue.
+Une fois encore, il est regrettable de devoir traiter manuellement les 
+références en Redis. Mais toute inquiétude au regard des implications de ces
+tâches en termes de performance ou de mémoire demande à être confirmée par un
+test. Je soupçonne que vous trouverez souvent que c'est un faux problème.
 
 ## Round Trips and Pipelining
 
